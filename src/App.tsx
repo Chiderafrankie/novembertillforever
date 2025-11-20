@@ -7,13 +7,26 @@ import { WellWishesSection } from "./components/WellWishesSection";
 import { FAQSection } from "./components/FAQSection";
 import { GiftSection } from "./components/GiftSection";
 import { PhotoUploadSection } from "./components/PhotoUploadSection";
-import { ImageWithFallback } from "./components/figma/ImageWithFallback";
-import heroImg1 from "figma:asset/1352f85715369796bd1c0a8add3a08bf8148efc5.png";
-import heroImg2 from "figma:asset/10370e0b8804ea3e4979e2ecc47f8095484e74ef.png";
-import heroImg3 from "figma:asset/27d7b85bb4afa1c61fc5acdbd3c37924ac22eea6.png";
-import galleryImg1 from "figma:asset/e4e66ca17773b207855416b49eab69aa77d3c840.png";
-import galleryImg2 from "figma:asset/bf35acd42ef737d2c46f7745dfa3efbe3150a259.png";
-import galleryImg3 from "figma:asset/3c2a70a2fc3096244ffa3759e386776830f24f68.png";
+// change imports to use PNGs from the assets folder
+import hero9Img from "./assets/hero9.png";
+import hero8Img from "./assets/hero8.png";
+import hero0Img from "./assets/hero0.png";
+// add new gallery asset imports
+import pic8 from "./assets/pic8.png";
+import pic9 from "./assets/pic9.png";
+// replaced unavailable figma asset with a safe inline SVG data-URL placeholder
+const heroImg1 =
+  "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='800'><rect width='100%25' height='100%25' fill='%23dddddd'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23666666' font-size='48'>Hero Image</text></svg>";
+const heroImg2 =
+  "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='800'><rect width='100%25' height='100%25' fill='%23e8e8e8'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23555555' font-size='40'>Hero Image 2</text></svg>";
+const heroImg3 =
+  "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='800'><rect width='100%25' height='100%25' fill='%23f2f2f2'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23444444' font-size='40'>Hero Image 3</text></svg>";
+const galleryImg1 =
+  "data:image/svg+xml;utf8, width='800' height='800'><rect width='100%25' height='100%25' fill='%23ededed'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23666666' font-size='36'>Gallery 1</text></svg>";
+const galleryImg2 =
+  "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800'><rect width='100%25' height='100%25' fill='%23efefef'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23555555' font-size='36'>Gallery 2</text></svg>";
+const galleryImg3 =
+  "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800'><rect width='100%25' height='100%25' fill='%23f7f7f7'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23444444' font-size='36'>Gallery 3</text></svg>";
 
 // Wedding date: November 22nd, 2025, 1:00 PM WAT
 const WEDDING_DATE = new Date("2025-11-22T13:00:00+01:00");
@@ -56,10 +69,17 @@ export default function App() {
     setTimeout(() => setShowRSVPForm(true), 500);
   };
 
-  const heroImages = [heroImg1, heroImg2, heroImg3];
+  // use project assets (fall back to inline SVG placeholders if needed)
+  const hero9 = hero9Img || heroImg1;
+  const hero8 = hero8Img || heroImg2;
+  const hero0 = hero0Img || heroImg3;
+
+  // use the new order: hero9, hero8, hero0
+  const heroImages = [hero9, hero8, hero0];
 
   // removed the first gallery image to avoid cutting off the head
-  const galleryImages = [galleryImg2, galleryImg3];
+  // include pic8 and pic9 from the assets folder
+  const galleryImages = [pic8, pic9];
 
   // New: detect md+ breakpoint and slideshow state for mobile
   const [isDesktop, setIsDesktop] = useState<boolean>(() => {
@@ -165,6 +185,19 @@ export default function App() {
     };
   }, [galleryImages.length]);
 
+  // helper fallback: set image src to placeholder if import fails at runtime
+  const handleImgError = (
+    e: React.SyntheticEvent<HTMLImageElement, Event>,
+    fallback: string
+  ) => {
+    const img = e.currentTarget;
+    if (img.src !== fallback) {
+      img.src = fallback;
+      img.style.objectPosition = "center center";
+      img.style.objectFit = "cover";
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white text-black">
       {/* Hero Section */}
@@ -174,10 +207,12 @@ export default function App() {
           <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-3 gap-0">
             {heroImages.map((img, index) => (
               <div key={index} className="relative h-full">
-                <ImageWithFallback
-                  src={img}
+                {/* use plain <img> to ensure imported assets render in the hero */}
+                <img
+                  src={img as string}
                   alt={`Wedding photo ${index + 1}`}
-                  className="w-full h-full object-cover object-top"
+                  className="w-full h-full object-cover object-center"
+                  onError={(e) => handleImgError(e as any, heroImg1)}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent md:bg-black/50"></div>
               </div>
@@ -193,12 +228,12 @@ export default function App() {
               transition={{ duration: 0.8 }}
               className="absolute inset-0"
             >
-              <ImageWithFallback
-                src={heroImages[currentSlide]}
+              {/* plain <img> for mobile slideshow too */}
+              <img
+                src={heroImages[currentSlide] as string}
                 alt={`Wedding photo ${currentSlide + 1}`}
-                className={`w-full h-full object-cover ${
-                  isDesktop ? "object-top" : "object-center"
-                }`}
+                className={`w-full h-full object-cover object-center`}
+                onError={(e) => handleImgError(e as any, heroImg1)}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
             </motion.div>
