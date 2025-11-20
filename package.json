@@ -1,5 +1,5 @@
 {
-      "name": "Black and White Wedding Website",
+      "name": "novemberweddingwebsite",
       "version": "0.1.0",
       "private": true,
       "dependencies": {
@@ -57,6 +57,12 @@
       "scripts": {
             "dev": "vite",
             "build": "vite build --outDir dist",
-            "preview": "vite preview"
+            "start": "next start"
+      },
+      "engines": {
+            "node": "20.x",
+            "npm": "10.x"
       }
+
+
 }
