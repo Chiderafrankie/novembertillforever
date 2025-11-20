@@ -1,5 +1,5 @@
 {
-      "name": "black-and-white-wedding-website",
+      "name": "Black and White Wedding Website",
       "version": "0.1.0",
       "private": true,
       "dependencies": {
@@ -56,7 +56,7 @@
       },
       "scripts": {
             "dev": "vite",
-            "build": "vite build",
+            "build": "vite build --outDir dist",
             "preview": "vite preview"
       }
 }
