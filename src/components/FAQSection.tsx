@@ -35,7 +35,7 @@ export function FAQSection() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8 }}
-      className="py-24 bg-black text-white"
+      className="py-24 bg-white text-black"
     >
       <div className="max-w-4xl mx-auto px-8">
         <h2 className="text-center uppercase tracking-widest mb-16">Questions</h2>

@@ -622,7 +622,7 @@ export default function App() {
       </motion.section>
 
       {/* Gift Section */}
-      <GiftSection />
+      
 
       {/* FAQ Section */}
       <FAQSection />
